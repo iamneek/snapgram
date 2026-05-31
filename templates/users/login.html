@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}SnapGram - Login{% endblock title %}
+
+{% block content %}
+    <h1>SnapGram Login</h1>
+    <form action="{% url 'login' %}" method="POST" class="register_form">
+        {% csrf_token %}
+        {% if error %}
+            <p>{{error}}</p>
+        {% endif %}
+        <input type="text" class="input_field" name="username" placeholder="Username", id="username_field" />
+        <input type="email" name="email" id="email_field" placeholder="Email" style="display:none"/>
+        <input type="password" class="input_field" name="password" placeholder="Password" />
+        <input type="submit" class="submit_button"/>
+        <a href="#" onclick="toggleLoginMethod()">Login with email instead</a>
+    </form>
+
+    <script>
+function toggleLoginMethod() {
+    const username = document.getElementById('username_field')
+    const email = document.getElementById('email_field')
+    username.style.display = username.style.display === 'none' ? 'block' : 'none'
+    email.style.display = email.style.display === 'none' ? 'block' : 'none'
+}
+</script>
+{% endblock content %}

@@ -34,7 +34,7 @@ def register_view(request):
                 {"error": "An error occurred while creating the user"},
             )
         login(request, user)
-        return redirect("feed")
+        return redirect("login")
     return render(request, "users/register.html")
 
 
@@ -56,7 +56,7 @@ def login_view(request):
                 request, "users/login.html", {"error": "Invalid Login Details!!"}
             )
         login(request, user)
-        return redirect("feed")
+        return redirect("register")
     return render(request, "users/login.html")
 
 
