@@ -2,25 +2,42 @@
 {% block title %}SnapGram - Login{% endblock title %}
 
 {% block content %}
-    <h1>SnapGram Login</h1>
-    <form action="{% url 'login' %}" method="POST" class="register_form">
-        {% csrf_token %}
-        {% if error %}
-            <p>{{error}}</p>
-        {% endif %}
-        <input type="text" class="input_field" name="username" placeholder="Username", id="username_field" />
-        <input type="email" name="email" id="email_field" placeholder="Email" style="display:none"/>
-        <input type="password" class="input_field" name="password" placeholder="Password" />
-        <input type="submit" class="submit_button"/>
-        <a href="#" onclick="toggleLoginMethod()">Login with email instead</a>
-    </form>
+<div class="min-h-screen flex items-center justify-center bg-base-100">
+    <div class="w-96">
+        <h1 class="text-3xl font-bold text-center mb-6">SnapGram</h1>
+        <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            {% for message in messages %}
+                <p class="text-error text-sm">{{ message }}</p>
+            {% endfor %}
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
+                <legend class="fieldset-legend font-bold">Login</legend>
+                <label class="label" id="user_label">Username</label>
+                <input type="text" class="input w-full" name="username" id="username_field" placeholder="Username"/>
+                <div class="text-right mt-2">
+                    <a href="#" onclick="toggleLoginMethod()" class="link text-sm">Login with email instead</a>
+                </div>
+                <input type="email" class="input w-full" name="email" placeholder="Email" id="email_field" style="display: none"/>
+                <label class="label">Password</label>
+                <input type="password" class="input w-full" placeholder="Password" name="password"/>
+                <button class="btn btn-neutral w-full mt-4">Login</button>
+            </fieldset>
+            <div class="flex flex-col items-center gap-2 mt-4">
+                <a href="{% url 'register' %}" class="link link-hover text-sm">Register a new account</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 
     <script>
 function toggleLoginMethod() {
     const username = document.getElementById('username_field')
     const email = document.getElementById('email_field')
+    const label = document.getElementById('user_label')
     username.style.display = username.style.display === 'none' ? 'block' : 'none'
     email.style.display = email.style.display === 'none' ? 'block' : 'none'
+    label.textContent = label.textContent.trim() === "Username" ? "Email" : "Username"
 }
 </script>
 {% endblock content %}
