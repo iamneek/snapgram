@@ -8,25 +8,36 @@ User = get_user_model()
 
 def register_view(request):
     
-    # TODO: NULL HANDLING / EMPTY VALUES HANDLING
-    
-    if request.method == "POST":        
-        if User.objects.filter(username=request.POST.get("username")).exists():
+    if request.method == "POST":
+         
+        username = request.POST.get("username")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        
+        if not username or not first_name or not last_name or email or password:
+            messages.error(request, "Do not leave fields empty!!")
+            return redirect("register")
+        
+        if User.objects.filter(username).exists():
             messages.error(request, "Username already exists")
             return redirect("register")
-        if User.objects.filter(email=request.POST.get("email")).exists():
+        
+        if User.objects.filter(email).exists():
             messages.error(request, "Email already exists")
             return redirect("register")
-        if request.POST.get("password") != request.POST.get("confirm_password"):
+        
+        if password != request.POST.get("confirm_password"):
             messages.error(request, "Passwords do not match")            
             return redirect("register")
         try:
             user = User.objects.create_user(
-                username=request.POST.get("username"),
-                first_name=request.POST.get("first_name"),
-                last_name=request.POST.get("last_name"),
-                email=request.POST.get("email"),
-                password=request.POST.get("password"),
+                username,
+                first_name,
+                last_name,
+                email,
+                password,
             )
         except IntegrityError:
             messages.error(request, "An error occurred while creating the user")            
@@ -37,8 +48,6 @@ def register_view(request):
 
 
 def login_view(request):
-    
-
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
