@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile - SnapGram{% endblock title %}
+
+{% block content %}
+<div class="min-h-screen bg-base-100 flex items-center justify-center">
+    <div class="w-full max-w-lg px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">Edit Profile</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for message in messages %}
+                <p class="text-error text-sm mb-4">{{ message }}</p>
+            {% endfor %}
+
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4 mb-4">
+                <legend class="fieldset-legend font-bold">Personal Info</legend>
+
+                <label class="label mt-2">First Name</label>
+                {{ user.first_name }}
+
+                <label class="label mt-2">Last Name</label>
+                {{ user.last_name }}
+            </fieldset>
+
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4 mb-4">
+                <legend class="fieldset-legend font-bold">Profile</legend>
+
+                <label class="label mt-2">Bio</label>
+                {{ profile.bio }}
+
+                <label class="label mt-2">Avatar</label>
+            <div class="flex items-center gap-6">
+                <img
+                    id="avatar-preview"
+                    src="{{ request.user.profile.avatar.url }}"
+                    class="w-24 h-24 rounded-full object-cover"
+                >
+
+                <div>
+                    <input
+                        type="file"
+                        name="avatar"
+                        id="id_avatar"
+                        class="file-input file-input-bordered"
+                        accept="image/*"
+                    >
+
+                    <p class="text-xs opacity-70 mt-2">
+                        JPG, PNG or WEBP. Max 5MB.
+                    </p>
+                </div>
+
+            </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-neutral w-full">Save Changes</button>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'profile' username=request.user.username %}" class="link link-hover text-sm">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById("id_avatar").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+
+    if (file) {
+        document.getElementById("avatar-preview").src =
+            URL.createObjectURL(file);
+    }
+});
+</script>
+{% endblock content %}

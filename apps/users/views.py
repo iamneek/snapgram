@@ -102,10 +102,11 @@ def edit_profile_view(request, username):
         
         user_form.save()
         profile_form.save()
+        return redirect("profile", username=user.username)
     
-    if request.method == "GET":
+    else:
         user_form = EditUser(instance=user)
         profile_form = EditProfile(instance=profile)
-        return render("users/edit.html", {'user': user_form, 'profile': profile_form})
+        return render(request, "users/edit.html", {'user': user_form, 'profile': profile_form})
 
         

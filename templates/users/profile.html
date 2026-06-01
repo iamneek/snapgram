@@ -4,11 +4,8 @@
 {% block content %}
 <div class="min-h-screen bg-base-100">
 
-    <!-- TODO: navbar -->
-
     <div class="max-w-2xl mx-auto px-4 py-8">
         
-        <!-- Profile Header -->
         <div class="flex items-center gap-8 mb-8">
             <div class="avatar">
                 <div class="w-24 rounded-full">
@@ -19,7 +16,7 @@
                 <div class="flex items-center gap-4 mb-2">
                     <h1 class="text-xl font-semibold">{{ user.username }}</h1>
                     {% if request.user == user %}
-                        <a href="#" class="btn btn-sm btn-outline">Edit Profile</a>
+                        <a href="{% url 'edit_profile' username=user.username %}" class="btn btn-sm btn-outline">Edit Profile</a>
                     {% endif %}
                 </div>
                 <p class="text-base-content/70 text-sm">{{ user.first_name }} {{ user.last_name }}</p>
