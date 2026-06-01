@@ -2,48 +2,50 @@ from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from .forms import EditUser, EditProfile
 
 User = get_user_model()
 
 
 def register_view(request):
-    
+
     if request.method == "POST":
-         
         username = request.POST.get("username")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         email = request.POST.get("email")
         password = request.POST.get("password")
-        
-        if not username or not first_name or not last_name or email or password:
+
+        if not username or not first_name or not last_name or not email or not password:
             messages.error(request, "Do not leave fields empty!!")
             return redirect("register")
-        
-        if User.objects.filter(username).exists():
+
+        if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists")
             return redirect("register")
-        
-        if User.objects.filter(email).exists():
+
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists")
             return redirect("register")
-        
+
         if password != request.POST.get("confirm_password"):
-            messages.error(request, "Passwords do not match")            
+            messages.error(request, "Passwords do not match")
             return redirect("register")
         try:
             user = User.objects.create_user(
-                username,
-                first_name,
-                last_name,
-                email,
-                password,
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password,
             )
         except IntegrityError:
-            messages.error(request, "An error occurred while creating the user")            
+            messages.error(request, "An error occurred while creating the user")
             return redirect("register")
         login(request, user)
-        return redirect("login")
+        return redirect("profile", username=user.username)
     return render(request, "users/register.html")
 
 
@@ -59,17 +61,51 @@ def login_view(request):
             try:
                 username = User.objects.get(email__exact=email).username
             except User.DoesNotExist:
-                messages.error(request, "Account not found!!")            
+                messages.error(request, "Account not found!!")
                 return redirect("login")
         user = authenticate(request, username=username, password=password)
         if not user:
-            messages.error(request, "Invalid Login Details!!")            
+            messages.error(request, "Invalid Login Details!!")
             return redirect("login")
         login(request, user)
-        return redirect("register")
+        return redirect("profile", username=user.username)
     return render(request, "users/login.html")
 
 
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+
+@login_required
+def profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, "users/profile.html", {"user": user})
+
+
+@login_required
+def edit_profile_view(request, username):
+    if not request.user.username == username:
+        messages.error(request, "Error, you can only edit your own profile...")
+        return redirect("profile", username=username)
+
+    user = get_object_or_404(User, username=username)
+    profile = user.profile
+
+    if request.method == "POST":
+        user_form = EditUser(request.POST, instance=user)
+        profile_form = EditProfile(request.POST, request.FILES, instance=profile)
+        
+        if not (user_form.is_valid() and profile_form.is_valid()):
+            messages.error(request, "Error editing profile, please verify your entries...")
+            return redirect("profile", username=user.username)
+        
+        user_form.save()
+        profile_form.save()
+    
+    if request.method == "GET":
+        user_form = EditUser(instance=user)
+        profile_form = EditProfile(instance=profile)
+        return render("users/edit.html", {'user': user_form, 'profile': profile_form})
+
+        

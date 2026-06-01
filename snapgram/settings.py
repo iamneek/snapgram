@@ -138,3 +138,5 @@ cloudinary.config(
     api_key=os.environ["CLOUDINARY_API_KEY"],
     api_secret=os.environ["CLOUDINARY_API_SECRET"],
 )
+
+LOGIN_URL = "login"
