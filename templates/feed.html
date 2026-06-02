@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}SnapGram{% endblock title %}
+
+{% block content %}
+<div class="max-w-lg mx-auto px-4 py-8">
+    <div id="feed-posts">
+        {% include 'posts/feed_posts.html' %}
+    </div>
+</div>
+{% endblock content %}
