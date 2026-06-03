@@ -47,8 +47,15 @@ def toggle_like(request, post_id):
 
 @login_required
 def create_comment_view(request, post_id):
-    pass
-
+    if request.method == "POST":
+        content = request.POST.get("comment_content").strip()
+        if not content:
+            messages.error(request, "Please enter a valid message!!")
+            return redirect("feed")
+        post = get_object_or_404(Post, id=post_id)
+        Comment.objects.create(post=post, author=request.user, content=content)
+        return render(request, "posts/comment_bar.html", {'post': post, 'comments': post.comments.select_related("author")})
+    return redirect("feed")
 
 @login_required
 def delete_comment_view(request, comment_id):
