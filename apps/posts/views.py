@@ -6,8 +6,11 @@ from django.core.paginator import Paginator
 
 def feed_view(request):
     page_num = request.GET.get('page', 1)
-    post_paginator = Paginator(Post.objects.all(), 10)
+    post_paginator = Paginator(Post.objects.all().order_by('-created_at'), 10)
     page_obj = post_paginator.get_page(page_num)
+    
+    if request.headers.get('HX-Request'):
+        return render(request, 'posts/feed_posts.html', {'page_obj' : page_obj})
     
     return render(request, 'feed.html', {'page_obj': page_obj})
 
