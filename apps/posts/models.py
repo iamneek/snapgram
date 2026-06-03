@@ -35,12 +35,12 @@ class Like(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         # unique_together = ('post', 'user')
         constraints = [
-            models.UniqueConstraint(fields=['post', 'user'], name='unq_post_like')
+            models.UniqueConstraint(fields=["post", "user"], name="unq_post_like")
         ]
-    
+
     def __str__(self):
         return f"{self.user.username} liked {self.post.author.username}'s post."

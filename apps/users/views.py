@@ -94,18 +94,20 @@ def edit_profile_view(request, username):
     if request.method == "POST":
         user_form = EditUser(request.POST, instance=user)
         profile_form = EditProfile(request.POST, request.FILES, instance=profile)
-        
+
         if not (user_form.is_valid() and profile_form.is_valid()):
-            messages.error(request, "Error editing profile, please verify your entries...")
+            messages.error(
+                request, "Error editing profile, please verify your entries..."
+            )
             return redirect("profile", username=user.username)
-        
+
         user_form.save()
         profile_form.save()
         return redirect("profile", username=user.username)
-    
+
     else:
         user_form = EditUser(instance=user)
         profile_form = EditProfile(instance=profile)
-        return render(request, "users/edit.html", {'user': user_form, 'profile': profile_form})
-
-        
+        return render(
+            request, "users/edit.html", {"user": user_form, "profile": profile_form}
+        )

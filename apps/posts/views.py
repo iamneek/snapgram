@@ -7,15 +7,23 @@ from django.db import transaction, IntegrityError
 
 
 def feed_view(request):
-    page_num = request.GET.get('page', 1)
-    post_paginator = Paginator(Post.objects.all().order_by('-created_at'), 10)
+    page_num = request.GET.get("page", 1)
+    post_paginator = Paginator(Post.objects.all().order_by("-created_at"), 10)
     page_obj = post_paginator.get_page(page_num)
-    liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
+    liked_post_ids = set(
+        Like.objects.filter(user=request.user).values_list("post_id", flat=True)
+    )
 
-    if request.headers.get('HX-Request'):
-        return render(request, 'posts/feed_posts.html', {'page_obj' : page_obj, 'liked_post_ids': liked_post_ids})
-    
-    return render(request, 'feed.html', {'page_obj': page_obj, 'liked_post_ids': liked_post_ids})
+    if request.headers.get("HX-Request"):
+        return render(
+            request,
+            "posts/feed_posts.html",
+            {"page_obj": page_obj, "liked_post_ids": liked_post_ids},
+        )
+
+    return render(
+        request, "feed.html", {"page_obj": page_obj, "liked_post_ids": liked_post_ids}
+    )
 
 
 @login_required
@@ -40,7 +48,9 @@ def toggle_like(request, post_id):
 
     if request.headers.get("HX-Request"):
         user_liked = Like.objects.filter(post=post, user=request.user).exists()
-        return render(request, 'posts/like_button.html', {'post': post, 'user_liked': user_liked})
+        return render(
+            request, "posts/like_button.html", {"post": post, "user_liked": user_liked}
+        )
     else:
         return redirect("feed")
 
@@ -54,10 +64,18 @@ def create_comment_view(request, post_id):
             return redirect("feed")
         post = get_object_or_404(Post, id=post_id)
         Comment.objects.create(post=post, author=request.user, content=content)
-        return render(request, "posts/comment_bar.html", {'post': post, 'comments': post.comments.select_related("author")})
+        return render(
+            request,
+            "posts/comment_bar.html",
+            {"post": post, "comments": post.comments.select_related("author")},
+        )
     return redirect("feed")
+
 
 @login_required
 def delete_comment_view(request, comment_id):
-    pass
-
+    if request.method == "POST":
+        cmnt = get_object_or_404(Comment, id=comment_id, author=request.user)
+        cmnt.delete()
+        return redirect("feed")
+    return redirect("feed")

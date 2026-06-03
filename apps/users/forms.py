@@ -2,6 +2,7 @@ from django import forms
 from .models import User, Profile
 from cloudinary.forms import CloudinaryFileField
 
+
 class EditUser(forms.ModelForm):
     class Meta:
         model = User
@@ -14,6 +15,7 @@ class EditUser(forms.ModelForm):
 
 class EditProfile(forms.ModelForm):
     avatar = CloudinaryFileField(required=False)
+
     class Meta:
         model = Profile
         fields = ["avatar", "bio"]
