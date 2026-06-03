@@ -44,7 +44,7 @@ def register_view(request):
             messages.error(request, "An error occurred while creating the user")
             return redirect("register")
         login(request, user)
-        return redirect("profile", username=user.username)
+        return redirect("feed")
     return render(request, "users/register.html")
 
 
@@ -67,7 +67,7 @@ def login_view(request):
             messages.error(request, "Invalid Login Details!!")
             return redirect("login")
         login(request, user)
-        return redirect("profile", username=user.username)
+        return redirect("feed")
     return render(request, "users/login.html")
 
 
