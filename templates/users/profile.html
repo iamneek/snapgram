@@ -24,8 +24,17 @@
             </div>
         </div>
 
-        <!-- TODO: posts grid -->
-        
+        <div class="grid grid-cols-3 gap-0.5 mt-16">
+            {% for post in posts %}
+            <a href="{% url 'post_detail' post.id %}">
+                <div class="aspect-square overflow-hidden bg-base-200">
+                    <img src="{{ post.image.url }}" alt="{{ post.caption }}" class="w-full h-full object-cover hover:opacity-75 transition"/>
+                </div>
+            </a>
+            {% empty %}
+                <p class="col-span-3 text-center text-base-content/50 text-sm py-8">No posts yet.</p>
+            {% endfor %}
+        </div>        
     </div>
 </div>
 {% endblock content %}

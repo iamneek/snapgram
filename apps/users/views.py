@@ -79,7 +79,8 @@ def logout_view(request):
 @login_required
 def profile_view(request, username):
     user = get_object_or_404(User, username=username)
-    return render(request, "users/profile.html", {"user": user})
+    posts = user.posts.all()
+    return render(request, "users/profile.html", {"user": user, "posts": posts})
 
 
 @login_required

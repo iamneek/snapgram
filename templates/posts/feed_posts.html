@@ -1,6 +1,5 @@
 {% for post in page_obj %}
-<div class="card bg-base-100 shadow-md mb-6">
-    
+<div class="card bg-base-100 border-b mb-6 rounded-none">
     <div class="flex items-center gap-3 p-4 justify-between">
     <div class="user_av_container flex items-center gap-3">
         <div class="avatar">
@@ -38,7 +37,7 @@
     {% endif %}
     </div>
 
-    <figure>
+    <figure onclick="window.location='{% url 'post_detail' post.id %}'" style="cursor: pointer;">
         <img src="{{ post.image.url }}" alt="{{ post.caption }}" class="w-full object-cover max-h-96" />
     </figure>
 
