@@ -39,10 +39,20 @@ def create_post_view(request):
             post.save()
             return redirect("profile", username=request.user.username)
         else:
-            return render(request, 'posts/new_post.html', {'form': form})
+            return render(request, "posts/new_post.html", {"form": form})
     else:
         form = CreatePostForm()
-        return render(request, 'posts/new_post.html', {'form': form})
+        return render(request, "posts/new_post.html", {"form": form})
+
+
+@login_required
+def delete_post_view(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=post_id, author=request.user)
+        post.delete()
+        return redirect("profile", username=request.user.username)
+    return redirect("feed")
+
 
 @login_required
 def toggle_like(request, post_id):
@@ -91,7 +101,6 @@ def create_comment_view(request, post_id):
 def delete_comment_view(request, comment_id):
     if request.method == "POST":
         cmnt = get_object_or_404(Comment, id=comment_id, author=request.user)
-        post = cmnt.post
         cmnt.delete()
         return HttpResponse("")
     return redirect("feed")

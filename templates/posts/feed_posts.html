@@ -1,7 +1,8 @@
 {% for post in page_obj %}
 <div class="card bg-base-100 shadow-md mb-6">
     
-    <div class="flex items-center gap-3 p-4">
+    <div class="flex items-center gap-3 p-4 justify-between">
+    <div class="user_av_container flex items-center gap-3">
         <div class="avatar">
             <div class="w-10 rounded-full">
                 {% if post.author.profile.avatar %}
@@ -13,13 +14,34 @@
             {{ post.author.username }}
         </a>
     </div>
+        {% if request.user == post.author %}
+    <div class="dropdown dropdown-end">
+        <button tabindex="0" class="btn btn-ghost btn-xs">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            </svg>
+        </button>
+        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box shadow w-32 p-1 z-10">
+            <li>
+                <form method="POST" action="{% url 'delete_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="text-error text-sm flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        Delete
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+    </div>
 
-    <!-- Post Image -->
     <figure>
         <img src="{{ post.image.url }}" alt="{{ post.caption }}" class="w-full object-cover max-h-96" />
     </figure>
 
-    <!-- Actions -->
     <div class="p-4">
         <div class="flex gap-2 mb-2">
             <div id="like-{{ post.id }}">

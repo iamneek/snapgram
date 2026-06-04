@@ -5,6 +5,7 @@ urlpatterns = [
     path("", views.feed_view, name="feed"),
     path("like/<int:post_id>/", views.toggle_like, name="like"),
     path("posts/new/", views.create_post_view, name="new_post"),
+    path("posts/delete/<int:post_id>", views.delete_post_view, name="delete_post"),
     path("posts/<int:post_id>/", views.post_detail_view, name="post_detail"),
     path(
         "comment/create/<int:post_id>/",
