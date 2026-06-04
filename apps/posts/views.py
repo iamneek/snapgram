@@ -70,7 +70,7 @@ def create_comment_view(request, post_id):
         return render(
             request,
             "posts/comment_list.html",
-            {'comments': post.comments.select_related('author')},
+            {"comments": post.comments.select_related("author")},
         )
 
     return redirect("feed")
@@ -92,5 +92,12 @@ def post_detail_view(request, post_id):
     liked_post_ids = set(
         Like.objects.filter(user=request.user).values_list("post_id", flat=True)
     )
-    return render(request, 'posts/post_detail.html', {"post":post, "liked_post_ids": liked_post_ids,     "comments": post.comments.select_related('author')
-})
+    return render(
+        request,
+        "posts/post_detail.html",
+        {
+            "post": post,
+            "liked_post_ids": liked_post_ids,
+            "comments": post.comments.select_related("author"),
+        },
+    )
