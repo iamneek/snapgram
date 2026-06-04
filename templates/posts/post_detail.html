@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ post.author.username }}'s post{% endblock title %}
+
+{% block content %}
+<div class="min-h-screen bg-base-100 flex items-center justify-center p-4">
+    <div class="flex w-full max-w-4xl bg-base-100 border border-base-300 rounded-box overflow-hidden" style="height: 80vh;">
+
+        <div class="w-1/2 bg-black flex items-center justify-center">
+            <img src="{{ post.image.url }}" alt="{{ post.caption }}" class="object-contain max-h-full w-full"/>
+        </div>
+
+        <div class="w-1/2 flex flex-col">
+
+            <div class="flex items-center gap-3 p-4 border-b border-base-300">
+                <div class="avatar">
+                    <div class="w-8 rounded-full">
+                        {% if post.author.profile.avatar %}
+                            <img src="{{ post.author.profile.avatar.url }}" alt="{{ post.author.username }}"/>
+                        {% endif %}
+                    </div>
+                </div>
+                <a href="{% url 'profile' username=post.author.username %}" class="font-semibold text-sm hover:underline">
+                    {{ post.author.username }}
+                </a>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="comments-list">
+                    {% include 'posts/comment_list.html' %}
+            </div>
+
+
+            <div class="px-4 py-2 border-t border-base-300 flex gap-4">
+                <div id="like-{{ post.id }}">
+                    {% include 'posts/like_button.html' %}
+                </div>
+                <span class="text-sm self-center">{{ post.comments.count }} comments</span>
+            </div>
+
+
+            {% if post.caption %}
+            <div class="px-4 py-2 border-t border-base-300">
+                <span class="font-semibold text-sm mr-1">{{ post.author.username }}</span>
+                <span class="text-sm">{{ post.caption }}</span>
+            </div>
+            {% endif %}
+
+            <div class="p-4 border-t border-base-300">
+                <form hx-post="{% url 'create_comment' post.id %}"
+                      hx-target="#comments-list"
+                      hx-swap="innerHTML"
+                      hx-disabled-elt="find button"
+                      hx-on::after-request="this.reset()"
+                      class="flex gap-2">
+                    {% csrf_token %}
+                    <input type="text" name="comment_content" placeholder="Add a comment..."
+                           class="input input-sm flex-1"
+                           onkeydown="if(event.key==='Enter'){event.preventDefault();this.closest('form').requestSubmit()}" required/>
+                    <button type="submit" class="btn btn-sm btn-neutral">Post</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

@@ -4,8 +4,10 @@ from django.contrib import messages
 from .models import Post, Like, Comment
 from django.core.paginator import Paginator
 from django.db import transaction, IntegrityError
+from django.http import HttpResponse
 
 
+@login_required
 def feed_view(request):
     page_num = request.GET.get("page", 1)
     post_paginator = Paginator(Post.objects.all().order_by("-created_at"), 10)
@@ -62,13 +64,15 @@ def create_comment_view(request, post_id):
         if not content:
             messages.error(request, "Please enter a valid message!!")
             return redirect("feed")
+
         post = get_object_or_404(Post, id=post_id)
         Comment.objects.create(post=post, author=request.user, content=content)
         return render(
             request,
-            "posts/comment_bar.html",
-            {"post": post, "comments": post.comments.select_related("author")},
+            "posts/comment_list.html",
+            {'comments': post.comments.select_related('author')},
         )
+
     return redirect("feed")
 
 
@@ -76,6 +80,17 @@ def create_comment_view(request, post_id):
 def delete_comment_view(request, comment_id):
     if request.method == "POST":
         cmnt = get_object_or_404(Comment, id=comment_id, author=request.user)
+        post = cmnt.post
         cmnt.delete()
-        return redirect("feed")
+        return HttpResponse("")
     return redirect("feed")
+
+
+@login_required
+def post_detail_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    liked_post_ids = set(
+        Like.objects.filter(user=request.user).values_list("post_id", flat=True)
+    )
+    return render(request, 'posts/post_detail.html', {"post":post, "liked_post_ids": liked_post_ids,     "comments": post.comments.select_related('author')
+})
