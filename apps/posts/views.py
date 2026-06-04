@@ -5,6 +5,7 @@ from .models import Post, Like, Comment
 from django.core.paginator import Paginator
 from django.db import transaction, IntegrityError
 from django.http import HttpResponse
+from .forms import CreatePostForm
 
 
 @login_required
@@ -30,8 +31,18 @@ def feed_view(request):
 
 @login_required
 def create_post_view(request):
-    pass
-
+    if request.method == "POST":
+        form = CreatePostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect("profile", username=request.user.username)
+        else:
+            return render(request, 'posts/new_post.html', {'form': form})
+    else:
+        form = CreatePostForm()
+        return render(request, 'posts/new_post.html', {'form': form})
 
 @login_required
 def toggle_like(request, post_id):
