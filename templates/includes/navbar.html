@@ -1,8 +1,22 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
   <div class="flex-1">
     <a class="btn btn-ghost text-xl font-bold" href="{% url 'feed' %}">SnapGram</a>
   </div>
-  <div class="flex-none gap-2">
+  {% if request.user.is_authenticated %}
+    <div class="flex-1 flex justify-center">
+        <div class="relative">
+            <input type="text" name="q" placeholder="Search..."
+                   class="input input-sm w-64 border border-base-300"
+                   hx-get="{% url 'search' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#search-results"
+                   hx-include="this"
+                   autocomplete="off"/>
+            <div id="search-results" class="absolute top-10 left-0 w-72 bg-base-100 shadow-lg rounded-box z-50"></div>
+        </div>
+    </div>
+    {% endif %}
+  <div class="gap-2 flex-1 flex justify-end">
     {% if request.user.is_authenticated %}
     <button class="btn btn-ghost btn-circle">
       <div class="indicator">

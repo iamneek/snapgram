@@ -30,5 +30,19 @@
         evt.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     });
 </script>
+{% comment %} <script>
+    let lastScroll = 0;
+    const navbar = document.querySelector('.navbar');
+    
+    window.addEventListener('scroll', () => {
+        const current = window.scrollY;
+        if (current > lastScroll && current > 100) {
+            navbar.style.transform = 'translateY(-100%)';
+        } else {
+            navbar.style.transform = 'translateY(0)';
+        }
+        lastScroll = current;
+    });
+</script> {% endcomment %}
   </body>
 </html>

@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import EditUser, EditProfile
+from django.db.models import Q
+from django.http import HttpResponse
+
 
 User = get_user_model()
 
@@ -67,6 +70,7 @@ def login_view(request):
             messages.error(request, "Invalid Login Details!!")
             return redirect("login")
         login(request, user)
+        print("login done")
         return redirect("feed")
     return render(request, "users/login.html")
 
@@ -112,3 +116,12 @@ def edit_profile_view(request, username):
         return render(
             request, "users/edit.html", {"user": user_form, "profile": profile_form}
         )
+
+
+@login_required
+def search_view(request):
+    query = request.GET.get('q', '').strip()
+    if not query:
+        return HttpResponse("")
+    users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query)).exclude(id=request.user.id)[:8]
+    return render(request, "users/search_results.html", {'user_list': users})
