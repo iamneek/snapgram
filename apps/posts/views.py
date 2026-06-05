@@ -13,7 +13,9 @@ def feed_view(request):
     post_paginator = Paginator(Post.objects.all().order_by("-created_at"), 10)
     page_obj = post_paginator.get_page(page_num)
     if request.user.is_authenticated:
-        liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
+        liked_post_ids = set(
+            Like.objects.filter(user=request.user).values_list("post_id", flat=True)
+        )
     else:
         liked_post_ids = set()
 
@@ -57,7 +59,7 @@ def delete_post_view(request, post_id):
 def toggle_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if not request.user.is_authenticated:
-        if request.headers.get('HX-Request'):
+        if request.headers.get("HX-Request"):
             return HttpResponse(status=401)
         return redirect("post_detail", post_id=post_id)
     if request.method == "POST":
@@ -84,7 +86,7 @@ def toggle_like(request, post_id):
 def create_comment_view(request, post_id):
     if request.method == "POST":
         if not request.user.is_authenticated:
-            if request.headers.get('HX-Request'):
+            if request.headers.get("HX-Request"):
                 return HttpResponse(status=401)
             return redirect("post_detail", post_id=post_id)
         content = request.POST.get("comment_content").strip()
@@ -116,7 +118,9 @@ def delete_comment_view(request, comment_id):
 def post_detail_view(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.user.is_authenticated:
-        liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
+        liked_post_ids = set(
+            Like.objects.filter(user=request.user).values_list("post_id", flat=True)
+        )
     else:
         liked_post_ids = set()
     return render(

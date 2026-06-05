@@ -119,10 +119,14 @@ def edit_profile_view(request, username):
 
 # @login_required
 def search_view(request):
-    query = request.GET.get('q', '').strip()
+    query = request.GET.get("q", "").strip()
     if not query:
         return HttpResponse("")
-    users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+    users = User.objects.filter(
+        Q(username__icontains=query)
+        | Q(first_name__icontains=query)
+        | Q(last_name__icontains=query)
+    )
     if request.user.is_authenticated:
         users.exclude(id=request.user.id)[:8]
-    return render(request, "users/search_results.html", {'user_list': users})
+    return render(request, "users/search_results.html", {"user_list": users})

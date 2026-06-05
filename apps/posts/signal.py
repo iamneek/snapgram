@@ -3,6 +3,7 @@ from django.dispatch import receiver
 import cloudinary.uploader
 from .models import Post
 
+
 @receiver(post_delete, sender=Post)
 def delete_post_image(sender, instance, **kwargs):
     if instance.image:
