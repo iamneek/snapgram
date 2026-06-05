@@ -14,6 +14,10 @@ COPY . .
 
 ENV DJANGO_SETTINGS_MODULE=snapgram.settings.prod
 
+ARG DJANGO_SECRET_KEY=dummy-secret-key-for-build
+
+ENV DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+
 RUN uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
