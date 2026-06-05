@@ -42,7 +42,7 @@ A simple Instagram-like social media web app built with Django. Users can sign u
 
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/iamneek/snapgram.git
    cd SnapGram
    ```
 
