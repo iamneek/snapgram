@@ -44,5 +44,15 @@
         lastScroll = current;
     });
 </script> {% endcomment %}
+<script>
+document.body.addEventListener('htmx:beforeSwap', function(evt) {
+    console.log('beforeSwap fired, status:', evt.detail.xhr.status);
+    if (evt.detail.xhr.status === 401) {
+        console.log('redirecting to login');
+        window.location.href = '/user/login/';
+        evt.detail.shouldSwap = false;
+    }
+});
+</script>
   </body>
 </html>
