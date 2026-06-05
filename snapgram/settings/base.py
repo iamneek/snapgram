@@ -132,9 +132,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 AUTH_USER_MODEL = "users.User"
 
 cloudinary.config(
-    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
-    api_key=os.environ["CLOUDINARY_API_KEY"],
-    api_secret=os.environ["CLOUDINARY_API_SECRET"],
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME", "dummy"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY", "dummy"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET", "dummy"),
 )
 
 LOGIN_URL = "login"
