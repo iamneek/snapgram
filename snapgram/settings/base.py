@@ -82,10 +82,10 @@ WSGI_APPLICATION = "snapgram.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["DB_NAME"],
-        "USER": os.environ["DB_USER"],
-        "PASSWORD": os.environ["DB_PASSWORD"],
-        "HOST": os.environ["DB_HOST"],
+        "NAME": os.environ.get("DB_NAME", "dummy"),
+        "USER": os.environ.get("DB_USER", "dummy"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "dummy"),
+        "HOST": os.environ.get("DB_HOST", "dummy"),
         "PORT": os.environ.get("DB_PORT", "5432"),
         "OPTIONS": {"sslmode": "require"},
     }
