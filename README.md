@@ -1,4 +1,15 @@
+
 # SnapGram
+
+&nbsp;
+
+
+<div align="center">
+   <img src="https://socialify.git.ci/iamneek/snapgram/image?font=Raleway&language=1&name=1&owner=1&pattern=Circuit+Board&theme=Light" alt="snapgram" width="640" height="320" />
+</div>
+
+&nbsp;
+
 
 A simple Instagram-like social media web app built with Django. Users can sign up, share photo posts, like and comment on posts, and manage their profiles.
 
@@ -6,15 +17,18 @@ A simple Instagram-like social media web app built with Django. Users can sign u
 
 ## Screenshots
 
-<!-- Add screenshot of the feed here -->
+<img width="1347" height="689" alt="image" src="https://github.com/user-attachments/assets/fcfe0745-1776-4a4c-b259-b9e657a80342" />
+
 
 &nbsp;
 
-<!-- Add screenshot of a user profile here -->
+<img width="1333" height="678" alt="image" src="https://github.com/user-attachments/assets/159a51fd-b497-4ecc-96d0-a0c880f85318" />
+
 
 &nbsp;
 
-<!-- Add screenshot of the post detail / comments here -->
+<img width="1340" height="674" alt="image" src="https://github.com/user-attachments/assets/30f0aa59-52fc-4e79-865b-4c4a6d31b42b" />
+
 
 &nbsp;
 
@@ -67,9 +81,9 @@ A simple Instagram-like social media web app built with Django. Users can sign u
 
 The app is deployed on [Render](https://render.com/) using the included `Dockerfile`.
 
-### Keeping It Awake
+### Keeping It Awake ( MISSION FAILED :( )
 
-Render's free plan puts services to sleep after 15 minutes of inactivity, which causes a noticeable cold-start delay on the first request after a quiet period. To work around this, the deployed instance is monitored by [UptimeRobot](https://uptimerobot.com/), which pings the app every few minutes so it stays warm.
+Render's free plan puts services to sleep after 15 minutes of inactivity, which causes a noticeable cold-start delay on the first request after a quiet period. To work around this, the deployed instance is monitored by [UptimeRobot](https://uptimerobot.com/), which pings the app every few minutes so it stays warm. (Didn't work for me)
 
 - **Uptime status:** [stats.uptimerobot.com/RwVnflyrPU](https://stats.uptimerobot.com/RwVnflyrPU)
 
