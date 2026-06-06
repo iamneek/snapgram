@@ -4,9 +4,7 @@
 &nbsp;
 
 
-<div align="center">
-   <img src="https://socialify.git.ci/iamneek/snapgram/image?font=Raleway&language=1&name=1&owner=1&pattern=Circuit+Board&theme=Light" alt="snapgram" width="640" height="320" />
-</div>
+<p align="center"><img src="https://socialify.git.ci/iamneek/snapgram/image?custom_language=Django&amp;font=Inter&amp;language=1&amp;name=1&amp;pattern=Circuit+Board&amp;&amp;&amp;theme=Light" alt="project-image"></p> <p align="center"><img src="https://img.shields.io/badge/Django-092E20?logo=django&amp;logoColor=white&amp;style=for-the-badge" alt="shields"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&amp;logoColor=white&amp;style=for-the-badge" alt="shields"></p> <p id="description">A note-taking application built with Django.</p>
 
 &nbsp;
 
